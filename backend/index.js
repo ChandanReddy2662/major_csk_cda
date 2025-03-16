@@ -17,7 +17,6 @@ connectDB();
 const app = express();
 app.use(cors({
     origin: process.env.FRONTEND_URI,
-    methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"]
 }));
 app.use(express.json());
 
