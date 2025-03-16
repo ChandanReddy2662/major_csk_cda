@@ -24,7 +24,7 @@ const Chat = ({ chatId, donationId, recipientId, recipientName }) => {
     };
 
     fetchUserChat();
-    socketRef.current = io('http://localhost:5000');
+    socketRef.current = io(import.meta.env.VITE_SOCKET);
 
     socketRef.current.emit('joinChat', { chatId });
 
