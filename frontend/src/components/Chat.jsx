@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import { useAuth } from '../context/AuthContext';
+import { axios } from 'axios'
 
+const VITE_SERVER = import.meta.env.VITE_API_URL
 const Chat = ({ chatId, donationId, recipientId, recipientName }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -13,11 +15,11 @@ const Chat = ({ chatId, donationId, recipientId, recipientName }) => {
   useEffect(() => {
     const fetchUserChat = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/chats/${donationId}/${recipientId ? recipientId : userId}`, {
+        const response = await axios.get(`${VITE_SERVER}/chats/${donationId}/${recipientId ? recipientId : userId}`, {
           headers: { Authorization: `Bearer ${authTokens}` },
         });
-        const data = await response.json();
-        setMessages(data);
+        //const data = await response.json();
+        setMessages(response.data);
       } catch (error) {
         console.error("Error fetching chat messages:", error);
       }
