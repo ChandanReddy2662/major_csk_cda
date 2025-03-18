@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import DonationCard from "../components/DonationCard";
+import Loader from "../components/Loader";
 
 
 const VITE_SERVER = import.meta.env.VITE_API_URL
@@ -10,12 +11,15 @@ const Community = () => {
   const [donations, setDonations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [loading, setLoading] = useState(false)
 
 
   useEffect(() => {
     const fetchDonations = async () => {
       try {
+        setLoading(true)
         const response = await axios.get(`${VITE_SERVER}/donations`);
+        setLoading(false)
         setDonations(response.data);
       } catch (error) {
         console.error("Error fetching donations:", error);
@@ -87,6 +91,8 @@ const Community = () => {
       >
         <h2 className="text-3xl font-semibold text-[#1E3A8A] text-center mb-6">Available Donations</h2>
         
+        {loading? 
+        <Loader zoom="1" color="rgba(39, 94, 254, 1)" /> :
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {filteredDonations.length > 0 ? (
             filteredDonations.map((donation) => (
@@ -95,7 +101,7 @@ const Community = () => {
           ) : (
             <p className="text-center text-gray-600 col-span-3">No donations found.</p>
           )}
-        </div>
+        </div>}
       </motion.div>
 
       {/* How It Works Section */}

@@ -17,6 +17,8 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminDonations from "./pages/admin/AdminDonations";
 import Admin from "./pages/admin/Admin";
+// import LoadingAnimation from "./components/LoadingAnimation";
+import Loader from "./components/Loader";
 
 function App() {
   const { user } = useAuth();

@@ -5,6 +5,7 @@ import Chat from "../components/Chat";
 import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import { FaUsers, FaHandHoldingHeart, FaMapMarkerAlt, FaPhone, FaEnvelope } from "react-icons/fa";
+import Loader from "../components/Loader";
 
 
 const VITE_SERVER = import.meta.env.VITE_API_URL
@@ -19,7 +20,7 @@ const DonationItemPage = () => {
   const [recipientList, setRecipientList] = useState([]);
   const [selectedRecipient, setSelectedRecipient] = useState(null);
   const [selectedChatUser, setSelectedChatUser] = useState(null);
-
+  
   useEffect(() => {
     const fetchDonation = async () => {
       try {
@@ -81,7 +82,7 @@ const DonationItemPage = () => {
   };
   
 
-  if (!donation) return <div className="text-center py-10 text-lg">Loading...</div>;
+  if (!donation) return <div className="text-center py-10 text-lg"><Loader zoom="1" color='blue' /></div>;
 
   return (
     <motion.div 

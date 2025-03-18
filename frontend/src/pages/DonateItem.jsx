@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
+import Loader from "../components/Loader";
 
 
 const VITE_SERVER = import.meta.env.VITE_API_URL
@@ -12,15 +13,16 @@ const DonateItem = () => {
   const { user, authTokens } = useAuth();
   const navigate = useNavigate();
   const categories = ["Clothes", "Electronics", "Furniture", "Appliances", "Mobile", "Sports", "Toys", "Books", "Other"];
+  const [loading, setLoading] = useState(false)
 
-  console.log(user.phon)
+  console.log(user)
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     category: "",
     image: null,
     email: user?.email || "",
-    phoneNumber: user?.phonenumber,
+    phoneNumber: user?.phonenumber || "",
     location: "",
     username: user?.username || "",
   });
@@ -53,14 +55,14 @@ const DonateItem = () => {
       for (const key in formData) {
         formDataToSend.append(key, formData[key]);
       }
-
+      setLoading(true)
       await axios.post(`${VITE_SERVER}/donations`, formDataToSend, {
         headers: {
           Authorization: `Bearer ${authTokens}`,
           "Content-Type": "multipart/form-data",
         },
       });
-
+      setLoading(false)
       setMessage("Donation created successfully 🎉");
 
       // Animate and navigate after 2 seconds
@@ -69,6 +71,7 @@ const DonateItem = () => {
         navigate("/community");
       }, 2000);
     } catch (error) {
+      setLoading(false)
       setMessage(error.response?.data?.message || "An error occurred");
     }
   };
@@ -127,7 +130,7 @@ const DonateItem = () => {
         <div className="mb-4">
           <label className="block text-gray-700 font-semibold mb-2" htmlFor="image">Upload Image</label>
           <input 
-            id="image" type="file" name="image" onChange={handleChange}
+            id="image" type="file" name="image" accept="image/*" onChange={handleChange}
             className="w-full p-2 border rounded-lg"
           />
         </div>
@@ -136,8 +139,11 @@ const DonateItem = () => {
         <div className="mb-4">
           <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">Email</label>
           <input 
-            id="email" type="email" name="email" value={formData.email} disabled
-            className="w-full p-3 border rounded-lg bg-gray-200 cursor-not-allowed"
+            id="email" type="email" name="email" value={formData.email} disabled={formData.email !== ''} 
+            onChange={handleChange}
+            className={`w-full p-3 border rounded-lg ${
+              formData.email !== '' ? 'bg-gray-200 cursor-not-allowed' : ''
+            }`}
           />
         </div>
 
@@ -145,8 +151,11 @@ const DonateItem = () => {
         <div className="mb-4">
           <label className="block text-gray-700 font-semibold mb-2" htmlFor="phoneNumber">Phone Number</label>
           <input 
-            id="phoneNumber" type="tel" name="phoneNumber" value={formData.phoneNumber} disabled
-            className="w-full p-3 border rounded-lg bg-gray-200 cursor-not-allowed"
+            id="phoneNumber" type="tel" name="phoneNumber" value={formData.phoneNumber} disabled={formData.phoneNumber !== ''} 
+            onChange={handleChange}
+            className={`w-full p-3 border rounded-lg ${
+              formData.phoneNumber !== '' ? 'bg-gray-200 cursor-not-allowed' : ''
+            }`}
           />
         </div>
 
@@ -154,7 +163,8 @@ const DonateItem = () => {
         <div className="mb-4">
           <label className="block text-gray-700 font-semibold mb-2" htmlFor="location">Location</label>
           <input 
-            id="location" type="text" name="location" value={formData.location} onChange={handleChange}
+            id="location" type="text" name="location" value={formData.location} 
+            onChange={handleChange}
             className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
             placeholder="Your location"
           />
@@ -167,7 +177,7 @@ const DonateItem = () => {
           whileTap={{ scale: 0.95 }} 
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg w-full"
         >
-          Donate
+          {loading?<Loader zoom="0.1" color="black" /> :"Donate"}
         </motion.button>
 
         {/* Success Message Animation */}

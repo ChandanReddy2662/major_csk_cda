@@ -1,6 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FaUsers, FaHandsHelping, FaRecycle, FaGlobe, FaHeart } from "react-icons/fa";
+import Loader from "../components/Loader";
+
 
 const About = () => {
   return (
@@ -27,6 +29,7 @@ const About = () => {
             With every contribution, we build a stronger and more connected community.
           </p>
         </div>
+        <Loader zoom='0.1' color={"green"} />
         <motion.img 
           src="images/image.png" 
           alt="Community Help"

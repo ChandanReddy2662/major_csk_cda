@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { motion } from "framer-motion";
+import Loader from "../components/Loader";
 
 
 const VITE_SERVER = import.meta.env.VITE_API_URL
@@ -13,15 +14,18 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       const response = await axios.post(`${VITE_SERVER}/auth/login`, { username, password });
-      
+      setLoading(false)
       login(response.data);
       navigate("/");
     } catch (error) {
+      setLoading(false)
       setMessage(error.response?.data?.message || "Login failed. Please try again.");
     }
   };
@@ -74,7 +78,7 @@ const Login = () => {
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg"
             type="submit"
           >
-            Login
+            {loading?<div className="w-full justify-center flex"><Loader zoom='0.08' color={"black"} /></div>:"Login"}
           </motion.button>
 
           {/* Error Message */}

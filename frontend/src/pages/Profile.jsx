@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import { FaUser, FaEnvelope, FaBirthdayCake, FaEdit, FaCheck, FaDonate, FaTrophy } from "react-icons/fa";
+import Loader from "../components/Loader";
 
 
 const VITE_SERVER = import.meta.env.VITE_API_URL
@@ -69,7 +70,7 @@ const Profile = () => {
   };
 
   if (!profile) {
-    return <div className="text-center text-lg py-10">Loading...</div>;
+    return <div className="w-full h-screen flex justify-center items-center text-lg py-10"><Loader zoom="0.6" color="blue" /></div>;
   }
 
   return (
@@ -79,6 +80,7 @@ const Profile = () => {
       transition={{ duration: 0.6 }}
       className="max-w-3xl mx-auto p-6 bg-gray-100 shadow-lg rounded-lg mt-10"
     >
+      
       {/* Profile Header */}
       <motion.div
         whileHover={{ scale: 1.02 }}

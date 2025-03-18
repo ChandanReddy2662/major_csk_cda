@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import Loader from "../components/Loader";
 
 const VITE_SERVER = import.meta.env.VITE_API_URL;
 
@@ -17,6 +18,7 @@ const Register = () => {
 
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false)
 
   // Handle input changes
   const handleChange = (e) => {
@@ -27,10 +29,13 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       await axios.post(`${VITE_SERVER}/auth/register`, formData);
+      setLoading(false)
       setMessage("🎉 Registration successful! Redirecting...");
       setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
+      setLoading(false)
       setMessage(
         error.response?.data?.message || "Registration failed. Please try again."
       );
@@ -143,7 +148,7 @@ const Register = () => {
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg"
             type="submit"
           >
-            Register
+            {loading? <Loader zoom="0.1" color="black" />: "Register"}
           </motion.button>
 
           {/* Success/Error Message */}
@@ -167,4 +172,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Register;  

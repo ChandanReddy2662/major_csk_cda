@@ -38,8 +38,10 @@ router.post('/login', async (req, res) => {
     if (!user.isApproved && !user.isAdmin) {
       return res.status(403).json({ message: 'Account pending admin approval' });
     }
+    console.log(user)
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const signOut = 30 * 24 * 60 * 60 * 1000
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: signOut });
     res.json({ token, user: { id: user._id, username: user.username, isAdmin: user.isAdmin, 
       isApproved: user.isApproved, email: user.email, socialScore: user.socialScore, phonenumber: user.phonenumber } });
   } catch (error) {

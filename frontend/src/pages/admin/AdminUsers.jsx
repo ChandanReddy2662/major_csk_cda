@@ -3,19 +3,23 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import { motion } from "framer-motion";
+import Loader from "../../components/Loader";
 
 const VITE_SERVER = import.meta.env.VITE_API_URL;
 
 const AdminUsers = () => {
   const { authTokens } = useAuth();
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        setLoading(true)
         const response = await axios.get(`${VITE_SERVER}/users`, {
           headers: { Authorization: `Bearer ${authTokens}` },
         });
+        setLoading(false)
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -54,7 +58,7 @@ const AdminUsers = () => {
       <h2 className="text-4xl font-bold text-[#1E3A8A] mb-6 text-center">
         👥 Manage Users
       </h2>
-
+      {loading?<Loader zoom="0.6" color="blue" />:
       <motion.table
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -95,7 +99,7 @@ const AdminUsers = () => {
             </motion.tr>
           ))}
         </tbody>
-      </motion.table>
+      </motion.table>}
     </motion.div>
   );
 };
