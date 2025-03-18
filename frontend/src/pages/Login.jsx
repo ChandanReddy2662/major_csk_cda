@@ -78,7 +78,7 @@ const Login = () => {
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg"
             type="submit"
           >
-            {loading?<div className="w-full justify-center flex"><Loader zoom='0.08' color={"black"} /></div>:"Login"}
+            {loading?<div className="w-full justify-center flex"><div><Loader zoom='0.08' color={"black"} /></div></div>:"Login"}
           </motion.button>
 
           {/* Error Message */}

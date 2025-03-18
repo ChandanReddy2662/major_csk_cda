@@ -92,7 +92,7 @@ const Community = () => {
         <h2 className="text-3xl font-semibold text-[#1E3A8A] text-center mb-6">Available Donations</h2>
         
         {loading? 
-        <Loader zoom="1" color="rgba(39, 94, 254, 1)" /> :
+        <div className="flex justify-center items-center"><div><Loader zoom="0.6" color="rgba(39, 94, 254, 1)" /></div></div> :
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {filteredDonations.length > 0 ? (
             filteredDonations.map((donation) => (

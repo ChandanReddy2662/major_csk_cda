@@ -82,7 +82,7 @@ const DonationItemPage = () => {
   };
   
 
-  if (!donation) return <div className="text-center py-10 text-lg"><Loader zoom="1" color='blue' /></div>;
+  if (!donation) return <div className="w-full h-screen flex justify-center items-center"><div className="py-10 text-lg"><Loader zoom="0.6" color='blue' /></div></div>;
 
   return (
     <motion.div 
