@@ -58,7 +58,7 @@ const AdminUsers = () => {
       <h2 className="text-4xl font-bold text-[#1E3A8A] mb-6 text-center">
         👥 Manage Users
       </h2>
-      {loading?<Loader zoom="0.6" color="blue" />:
+      {loading?<div className="flex h-screen justify-center items-center"><Loader zoom="0.4" color="blue" /></div>:
       <motion.table
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

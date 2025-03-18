@@ -177,7 +177,7 @@ const DonateItem = () => {
           whileTap={{ scale: 0.95 }} 
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg w-full"
         >
-          {loading?<Loader zoom="0.1" color="black" /> :"Donate"}
+          {loading?<div className="flex justify-center" style={{textAlign: "initial"}}><Loader zoom="0.1" color="black" /></div> :"Donate"}
         </motion.button>
 
         {/* Success Message Animation */}

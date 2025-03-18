@@ -61,7 +61,7 @@ const AdminDonations = () => {
       <h2 className="text-4xl font-bold text-[#1E3A8A] mb-6 text-center">🎁 Manage Donations</h2>
 
       {loading ? (
-        <Loader zoom="0.6" color="blue" />
+        <div className="flex h-screen justify-center items-center"><Loader zoom="0.4" color="blue" /></div>
       ) : donations.length === 0 ? (
         <p className="text-center text-lg text-gray-500">No donations found.</p>
       ) : (
