@@ -3,29 +3,30 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { motion } from "framer-motion";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import icons
 import Loader from "../components/Loader";
 
-
-const VITE_SERVER = import.meta.env.VITE_API_URL
+const VITE_SERVER = import.meta.env.VITE_API_URL;
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await axios.post(`${VITE_SERVER}/auth/login`, { username, password });
-      setLoading(false)
+      setLoading(false);
       login(response.data);
       navigate("/");
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       setMessage(error.response?.data?.message || "Login failed. Please try again.");
     }
   };
@@ -56,19 +57,26 @@ const Login = () => {
             />
           </div>
 
-          {/* Password Field */}
-          <div>
+          {/* Password Field with Eye Icon */}
+          <div className="relative">
             <label className="block text-gray-700 font-semibold" htmlFor="password">
               Password
             </label>
             <input
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
               id="password"
-              type="password"
+              type={showPassword ? "text" : "password"} // Toggle password visibility
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            {/* Eye Icon for Toggle */}
+            <span
+              className="absolute top-10 right-3 cursor-pointer text-gray-500"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+            </span>
           </div>
 
           {/* Submit Button */}
@@ -78,7 +86,13 @@ const Login = () => {
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg"
             type="submit"
           >
-            {loading?<div className="flex justify-center" style={{textAlign: "initial"}}><div><Loader zoom='0.08' color="black" /></div></div>:"Login"}
+            {loading ? (
+              <div className="flex justify-center">
+                <Loader zoom="0.08" color="black" />
+              </div>
+            ) : (
+              "Login"
+            )}
           </motion.button>
 
           {/* Error Message */}

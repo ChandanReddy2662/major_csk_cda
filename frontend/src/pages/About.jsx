@@ -29,7 +29,6 @@ const About = () => {
             With every contribution, we build a stronger and more connected community.
           </p>
         </div>
-        <Loader zoom='0.1' color={"green"} />
         <motion.img 
           src="images/image.png" 
           alt="Community Help"

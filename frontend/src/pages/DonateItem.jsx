@@ -1,4 +1,3 @@
-// src/pages/DonateItem.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -6,16 +5,15 @@ import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import Loader from "../components/Loader";
 
-
-const VITE_SERVER = import.meta.env.VITE_API_URL
+const VITE_SERVER = import.meta.env.VITE_API_URL;
 
 const DonateItem = () => {
   const { user, authTokens } = useAuth();
   const navigate = useNavigate();
   const categories = ["Clothes", "Electronics", "Furniture", "Appliances", "Mobile", "Sports", "Toys", "Books", "Other"];
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
-  console.log(user)
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -27,7 +25,7 @@ const DonateItem = () => {
     username: user?.username || "",
   });
 
-  const [message, setMessage] = useState("");
+  const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -39,6 +37,19 @@ const DonateItem = () => {
       }));
     }
   }, [user]);
+
+  useEffect(() => {
+    // Check if all required fields are filled
+    const { title, description, category, image, location } = formData;
+    const isValid =
+      title.trim() !== "" &&
+      description.trim() !== "" &&
+      category.trim() !== "" &&
+      image !== null &&
+      location.trim() !== "";
+
+    setIsFormValid(isValid);
+  }, [formData]);
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -55,23 +66,22 @@ const DonateItem = () => {
       for (const key in formData) {
         formDataToSend.append(key, formData[key]);
       }
-      setLoading(true)
+      setLoading(true);
       await axios.post(`${VITE_SERVER}/donations`, formDataToSend, {
         headers: {
           Authorization: `Bearer ${authTokens}`,
           "Content-Type": "multipart/form-data",
         },
       });
-      setLoading(false)
+      setLoading(false);
       setMessage("Donation created successfully 🎉");
 
-      // Animate and navigate after 2 seconds
       setTimeout(() => {
         setMessage("");
         navigate("/community");
       }, 2000);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       setMessage(error.response?.data?.message || "An error occurred");
     }
   };
@@ -94,9 +104,9 @@ const DonateItem = () => {
       >
         {/* Title Input */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="title">Title</label>
+          <label className="block text-gray-700 font-semibold mb-2" htmlFor="title">Title *</label>
           <input 
-            id="title" name="title" type="text" value={formData.title} onChange={handleChange}
+            id="title" name="title" type="text" value={formData.title} onChange={handleChange} required
             className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
             placeholder="Item title"
           />
@@ -104,9 +114,9 @@ const DonateItem = () => {
 
         {/* Description Input */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="description">Description</label>
+          <label className="block text-gray-700 font-semibold mb-2" htmlFor="description">Description *</label>
           <textarea 
-            id="description" name="description" value={formData.description} onChange={handleChange}
+            id="description" name="description" value={formData.description} onChange={handleChange} required
             className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
             placeholder="Describe the item"
           />
@@ -114,9 +124,9 @@ const DonateItem = () => {
 
         {/* Category Select */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="category">Category</label>
+          <label className="block text-gray-700 font-semibold mb-2" htmlFor="category">Category *</label>
           <select 
-            id="category" name="category" value={formData.category} onChange={handleChange}
+            id="category" name="category" value={formData.category} onChange={handleChange} required
             className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
           >
             <option value="">Select Category</option>
@@ -128,43 +138,37 @@ const DonateItem = () => {
 
         {/* Image Upload */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="image">Upload Image</label>
+          <label className="block text-gray-700 font-semibold mb-2" htmlFor="image">Upload Image *</label>
           <input 
-            id="image" type="file" name="image" accept="image/*" onChange={handleChange}
+            id="image" type="file" name="image" accept="image/*" onChange={handleChange} required
             className="w-full p-2 border rounded-lg"
           />
         </div>
 
         {/* Email Input (Disabled) */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">Email</label>
+          <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">Email *</label>
           <input 
-            id="email" type="email" name="email" value={formData.email} disabled={formData.email !== ''} 
-            onChange={handleChange}
-            className={`w-full p-3 border rounded-lg ${
-              formData.email !== '' ? 'bg-gray-200 cursor-not-allowed' : ''
-            }`}
+            id="email" type="email" name="email" value={formData.email} disabled
+            className="w-full p-3 border rounded-lg bg-gray-200 cursor-not-allowed"
           />
         </div>
 
         {/* Phone Number Input (Disabled) */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="phoneNumber">Phone Number</label>
+          <label className="block text-gray-700 font-semibold mb-2" htmlFor="phoneNumber">Phone Number *</label>
           <input 
-            id="phoneNumber" type="tel" name="phoneNumber" value={formData.phoneNumber} disabled={formData.phoneNumber !== ''} 
-            onChange={handleChange}
-            className={`w-full p-3 border rounded-lg ${
-              formData.phoneNumber !== '' ? 'bg-gray-200 cursor-not-allowed' : ''
-            }`}
+            id="phoneNumber" type="tel" name="phoneNumber" value={formData.phoneNumber} disabled
+            className="w-full p-3 border rounded-lg bg-gray-200 cursor-not-allowed"
           />
         </div>
 
         {/* Location Input */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="location">Location</label>
+          <label className="block text-gray-700 font-semibold mb-2" htmlFor="location">Location *</label>
           <input 
             id="location" type="text" name="location" value={formData.location} 
-            onChange={handleChange}
+            onChange={handleChange} required
             className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
             placeholder="Your location"
           />
@@ -175,12 +179,15 @@ const DonateItem = () => {
           type="submit"
           whileHover={{ scale: 1.05 }} 
           whileTap={{ scale: 0.95 }} 
-          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg w-full"
+          className={`text-white font-bold py-3 px-6 rounded-lg w-full ${
+            isFormValid ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
+          }`}
+          disabled={!isFormValid}
         >
-          {loading?<div className="flex justify-center" style={{textAlign: "initial"}}><Loader zoom="0.1" color="black" /></div> :"Donate"}
+          {loading ? <Loader zoom="0.1" color="black" /> : "Donate"}
         </motion.button>
 
-        {/* Success Message Animation */}
+        {/* Success Message */}
         {message && (
           <motion.div 
             initial={{ opacity: 0, y: -10 }} 
