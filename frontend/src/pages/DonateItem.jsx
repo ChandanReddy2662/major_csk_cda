@@ -184,7 +184,9 @@ const DonateItem = () => {
           }`}
           disabled={!isFormValid}
         >
-          {loading ? <Loader zoom="0.1" color="black" /> : "Donate"}
+          {!loading ?
+          <div className="flex justify-center" style={{textAlign: "initial"}} ><div><Loader zoom="0.1" color="black" /></div></div> : 
+          "Donate"}
         </motion.button>
 
         {/* Success Message */}
