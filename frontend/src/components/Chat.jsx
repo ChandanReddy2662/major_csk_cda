@@ -16,12 +16,13 @@ const Chat = ({ chatId, donationId, recipientId, recipientName }) => {
   useEffect(() => {
     const fetchUserChat = async () => {
       try {
-        const response = await axios.get(`${VITE_SERVER}/chats/${donationId}/${recipientId ? recipientId : userId}`, {
+        const response = await axios.get(`${VITE_SERVER}/chats/${donationId}/${(recipientId !== chatId.split('-')[3]) ? recipientId : userId}`, {
           headers: { Authorization: `Bearer ${authTokens}` },
         });
         setMessages(response.data);
+        // console.log(response.data)
       } catch (error) {
-        console.error("Error fetching chat messages:", error);
+        console.error("Error fetching chat messages:", error);  
       }
     };
 
@@ -55,6 +56,16 @@ const Chat = ({ chatId, donationId, recipientId, recipientName }) => {
       };
 
       socketRef.current.emit('sendMessage', messageData);
+
+      // **Send Notification to Donor**
+      const notificationData = {
+        senderId: userId,
+        recipientId: recipientId?recipientId:"", // Donor's ID
+        message: `New message from ${user.username}`,
+        donationId: donationId // Customize the notification text
+      };
+      socketRef.current.emit('sendNotification', notificationData);
+
       setNewMessage('');
     }
   };

@@ -45,7 +45,6 @@ router.get('/', verifyToken, async (req,res)=>{
 
 router.put('/update', verifyToken, async (req, res) => {
   try {
-    console.log(req.body)
     const user = await User.findOneAndUpdate({_id: req.userId}, req.body)
     await user.save()
     console.log(user)

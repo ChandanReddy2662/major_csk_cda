@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Chat = require('../models/Chat');
 const User = require('../models/User');
+const Notification = require('../models/Notification')
 
 // Get all users who have chatted within a specific donation
 router.get('/users/:donationId', async (req, res) => {
@@ -26,11 +27,21 @@ router.get('/users/:donationId', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-
+router.get("/notifications/:userId", async (req, res) => {
+  try {
+    const notifications = await Notification.find({ userId: req.params.userId }).sort({createdAt: -1})
+    console.log("line 63", notifications, req.params.userId)
+    res.json(notifications);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch notifications" });
+  }
+});
 // Get all chats between a specific donor and user within a donation
 router.get('/:donationId/:userId', async (req, res) => {
+  
   try {
     const { donationId, userId } = req.params;
+    console.log(req.params)
 
     const chat = await Chat.findOne({ donationId: donationId });
     if(chat){
@@ -52,5 +63,7 @@ router.get('/:donationId/:userId', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+
 
 module.exports = router;

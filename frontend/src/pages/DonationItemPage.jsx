@@ -213,6 +213,7 @@ const DonationItemPage = () => {
               chatId={`donation-${donation._id}-${user.id}-${donation.donor._id}`} 
               donationId={donation._id} 
               recipientName={donation.donor.username} 
+              recipientId={donation.donor._id}
             />
           )}
         </div>
