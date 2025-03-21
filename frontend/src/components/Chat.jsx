@@ -69,6 +69,12 @@ const Chat = ({ chatId, donationId, recipientId, recipientName }) => {
       setNewMessage('');
     }
   };
+  
+  const handleEnterKey = (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  }
 
   return (
     <div className="border p-4 rounded-lg shadow-md bg-white w-full max-w-2xl mx-auto">
@@ -110,6 +116,7 @@ const Chat = ({ chatId, donationId, recipientId, recipientName }) => {
         />
         <button 
           onClick={sendMessage} 
+          onKeyDown={handleEnterKey}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full sm:w-auto"
         >
           Send
