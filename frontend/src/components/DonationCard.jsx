@@ -12,7 +12,7 @@ const DonationCard = ({ donation }) => {
       {/* Image Section */}
       <div className="relative flex justify-center items-center p-4">
         <img 
-          src={donation.image || "https://via.placeholder.com/300"} 
+          src={donation.image || "images/donationDefault.png"} 
           alt={donation.title} 
           className="w-48 h-48 object-cover rounded-t-lg "
         />
