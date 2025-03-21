@@ -1,47 +1,87 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import User from "../models/User.js";
-import dotenv from "dotenv";
-
-dotenv.config();
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
 // Register User
-export const register = async (req, res) => {
+const registerUser = async (req, res) => {
   try {
-    const { name, username, age, email, password } = req.body;
+    const { name, username, age, email, password, phoneNumber } = req.body;
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: "Email already exists" });
+    // Check if user already exists
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ message: "User already exists (Change email and/or password)" });
+    }
 
+    // Hash Password
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, username, age, email, password: hashedPassword });
 
-    await newUser.save();
-    res.status(201).json({ message: "User registered successfully, awaiting approval" });
+    // Create User
+    const user = new User({
+      name,
+      username,
+      age,
+      email,
+      password: hashedPassword,
+      phonenumber: phoneNumber,
+    });
+
+    await user.save();
+    res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server Error", error });
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 // Login User
-export const login = async (req, res) => {
+const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
-
     const user = await User.findOne({ username });
-    if (!user) return res.status(400).json({ message: "User not found" });
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-
-    if (user.status !== "approved") {
-      return res.status(403).json({ message: "User not approved by admin" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
 
-    res.json({ token, user: { id: user._id, name: user.name, role: user.role } });
+    if (!user.isApproved && !user.isAdmin) {
+      return res
+        .status(403)
+        .json({ message: "Account pending admin approval" });
+    }
+
+    // Generate JWT Token
+    const signOutTime = 30 * 24 * 60 * 60 * 1000; // 30 days
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: signOutTime,
+    });
+
+    res.status(200).json({
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        isAdmin: user.isAdmin,
+        isApproved: user.isApproved,
+        email: user.email,
+        socialScore: user.socialScore,
+        phonenumber: user.phonenumber,
+      },
+    });
   } catch (error) {
-    res.status(500).json({ message: "Server Error", error });
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
 };
