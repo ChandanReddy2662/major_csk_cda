@@ -88,7 +88,7 @@ const Login = () => {
           >
             {loading ? (
               <div className="flex justify-center">
-                <Loader zoom="0.08" color="black" />
+                <div style={{textAlign:"initial"}}><Loader zoom="0.08" color="black" /></div>
               </div>
             ) : (
               "Login"

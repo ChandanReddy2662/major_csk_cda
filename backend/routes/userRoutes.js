@@ -48,8 +48,12 @@ router.put('/update', verifyToken, async (req, res) => {
     const user = await User.findOneAndUpdate({_id: req.userId}, req.body)
     await user.save()
     console.log(user)
-    res.json(user)
+    res.json({
+      user: { id: user._id, username: user.username, isAdmin: user.isAdmin, 
+        isApproved: user.isApproved, email: user.email, socialScore: user.socialScore, phonenumber: user.phonenumber }  
+    })
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: 'Server error' });
   }
 })

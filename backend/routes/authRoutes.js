@@ -42,7 +42,7 @@ router.post('/login', async (req, res) => {
 
     const signOut = 30 * 24 * 60 * 60 * 1000
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: signOut });
-    res.json({ token, user: { id: user._id, username: user.username, isAdmin: user.isAdmin, 
+    res.status(200).json({ token, user: { id: user._id, username: user.username, isAdmin: user.isAdmin, 
       isApproved: user.isApproved, email: user.email, socialScore: user.socialScore, phonenumber: user.phonenumber } });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });

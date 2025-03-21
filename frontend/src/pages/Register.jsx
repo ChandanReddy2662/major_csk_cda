@@ -206,7 +206,11 @@ const Register = () => {
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg"
             type="submit"
           >
-            {loading ? <Loader zoom="0.1" color="black" /> : "Register"}
+            {loading ?
+             <div className="flex justify-center">
+              <div style={{textAlign:"initial"}}><Loader zoom="0.08" color="black" /></div>
+            </div>:
+              "Register"}
           </motion.button>
 
           {/* Success/Error Message */}
