@@ -60,7 +60,7 @@ const Chat = ({ chatId, donationId, recipientId, recipientName }) => {
       // **Send Notification to Donor**
       const notificationData = {
         senderId: userId,
-        recipientId: (recipientId !== chatId.split('-')[3]) ? recipientId : userId, // Donor's ID
+        recipientId: recipientId, // Donor's ID
         message: `New message from ${user.username}`,
         donationId: donationId // Customize the notification text
       };
