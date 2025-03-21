@@ -111,12 +111,12 @@ const Chat = ({ chatId, donationId, recipientId, recipientName }) => {
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={handleEnterKey}
           className="border p-2 rounded-lg w-full sm:w-auto flex-grow focus:outline-none"
           placeholder="Type a message..."
         />
         <button 
           onClick={sendMessage} 
-          onKeyDown={handleEnterKey}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full sm:w-auto"
         >
           Send
