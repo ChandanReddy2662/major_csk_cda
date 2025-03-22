@@ -34,7 +34,7 @@ const Navbar = () => {
         </div>
 
         {/* Logo (Left in Large Screens, Center in Small Screens) */}
-        <div className="text-2xl font-bold tracking-wide text-center md:text-left flex-1 md:flex-none md:w-auto">
+        <div className="text-xl lg:text-2xl font-bold tracking-wide text-center md:text-left flex-1 md:flex-none md:w-auto">
           <Link to="/">
             Community<span className="text-blue-400">Donate</span>
           </Link>
@@ -42,7 +42,13 @@ const Navbar = () => {
 
         {/* Right Section: Profile & Bell */}
         <div className="flex items-center space-x-4">
-          <NotificationBell />
+        {isLoggedIn && (
+          <div className="bg-yellow-500 text-gray-900 px-3 py-1 rounded-lg shadow-md flex items-center text-sm md:text-base">
+            <FaMedal className="mr-1 text-sm md:text-lg" />
+            <span className="font-bold"><span className="hidden">Score:</span> {socialScore}</span>
+          </div>
+        )}
+          {isLoggedIn && <NotificationBell />}
 
           {isLoggedIn && (
             <div className="relative">

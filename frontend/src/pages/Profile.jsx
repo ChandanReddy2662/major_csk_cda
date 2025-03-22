@@ -166,6 +166,58 @@ const Profile = () => {
           </motion.p>
         </motion.div>
       </div>
+       {/* Donations Section */}
+       <div className="mt-8">
+        <h3 className="text-2xl font-semibold text-gray-800 mb-4">💰 My Donations</h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Donations Made */}
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            className="bg-white p-4 rounded-lg shadow-md"
+          >
+            <h4 className="text-lg font-semibold text-gray-700 flex items-center">
+              <FaDonate className="mr-2 text-green-600" /> Donations Made
+            </h4>
+            {donationsMade.length > 0 ? (
+              donationsMade.map((donation) => (
+                <div key={donation._id} className="flex items-center bg-gray-100 shadow p-3 rounded-lg mt-2">
+                  <img src={donation.image} alt={donation.title} className="h-6 w-6 rounded-full mr-3" />
+                  <div>
+                    <p className="text-gray-800 font-semibold">{donation.title}</p>
+                    <p className="text-gray-600 text-sm">{donation.description}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 text-sm">No donations made yet.</p>
+            )}
+          </motion.div>
+
+          {/* Donations Received */}
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            className="bg-white p-4 rounded-lg shadow-md"
+          >
+            <h4 className="text-lg font-semibold text-gray-700 flex items-center">
+              <FaDonate className="mr-2 text-red-600" /> Donations Received
+            </h4>
+            {donationsReceived.length > 0 ? (
+              donationsReceived.map((donation) => (
+                <div key={donation._id} className="flex items-center bg-gray-100 shadow p-3 rounded-lg mt-2">
+                <img src={donation.image} alt={donation.title} className="h-6 w-6 rounded-full mr-3" />
+                <div>
+                  <p className="text-gray-800 font-semibold">{donation.title}</p>
+                  <p className="text-gray-600 text-sm">{donation.description}</p>
+                </div>
+              </div>
+              ))
+            ) : (
+              <p className="text-gray-500 text-sm">No donations received yet.</p>
+            )}
+          </motion.div>
+        </div>
+      </div>
     </motion.div>
   );
 };
