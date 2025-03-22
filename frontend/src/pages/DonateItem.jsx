@@ -182,7 +182,7 @@ const DonateItem = () => {
           className={`text-white font-bold py-3 px-6 rounded-lg w-full ${
             isFormValid ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
           }`}
-          disabled={!isFormValid}
+          disabled={!isFormValid || loading}
         >
           {loading ?
           <div className="flex justify-center" style={{textAlign: "initial"}} ><div><Loader zoom="0.1" color="black" /></div></div> : 
