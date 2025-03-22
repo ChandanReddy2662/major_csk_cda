@@ -21,9 +21,10 @@ const Navbar = () => {
 
   return (
     <nav className="bg-gray-900 text-white fixed top-0 left-0 w-full shadow-md z-50">
-      <div className="container mx-auto flex justify-between items-center py-3 px-6 md:justify-start">
+      <div className=" mx-auto flex items-center justify-between py-3 px-6 lg:w-full">
+        
         {/* Mobile: Menu Button (Left) */}
-        <div className="flex items-center md:hidden w-1/3">
+        <div className="flex items-center md:hidden">
           <button
             onClick={() => setMenuOpen(true)}
             className="text-2xl focus:outline-none"
@@ -32,20 +33,49 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Title (Centered in Mobile) */}
-        <div className="text-2xl font-bold tracking-wide text-center w-1/3 md:w-auto">
+        {/* Logo (Left in Large Screens, Center in Small Screens) */}
+        <div className="text-2xl font-bold tracking-wide text-center md:text-left flex-1 md:flex-none md:w-auto">
           <Link to="/">
             Community<span className="text-blue-400">Donate</span>
           </Link>
         </div>
 
-        {/* Bell Icon (Right in Mobile) */}
-        <div className="flex items-center justify-end md:hidden w-1/3">
+        {/* Right Section: Profile & Bell */}
+        <div className="flex items-center space-x-4">
           <NotificationBell />
+
+          {isLoggedIn && (
+            <div className="relative">
+              <button
+                onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                className="focus:outline-none"
+              >
+                <FaUserCircle className="text-xl text-blue-400 hover:text-blue-500 transition duration-300" />
+              </button>
+
+              {profileDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-40 bg-white text-gray-800 rounded-md shadow-lg py-2">
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-blue-500 hover:bg-gray-200"
+                    onClick={() => setProfileDropdownOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-200"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-6 items-center w-full justify-end">
+        {/* Desktop Navigation (Centered in Large Screens) */}
+        <div className="hidden md:flex space-x-6 absolute left-1/2 transform -translate-x-1/2">
           <Link to="/" className="hover:text-blue-400 transition duration-300">
             Home
           </Link>
@@ -59,74 +89,23 @@ const Navbar = () => {
             Community
           </Link>
 
-          {isLoggedIn && (
-            <>
-              {isApproved && (
-                <Link to="/donate" className="hover:text-blue-400 transition duration-300">
-                  Donate
-                </Link>
-              )}
-              {isAdmin && (
-                <Link to="/admin" className="hover:text-red-400 transition duration-300">
-                  Admin
-                </Link>
-              )}
-
-              {/* Social Score Display */}
-              <div className="flex items-center bg-yellow-500 text-gray-900 px-3 py-1 rounded-lg shadow-md">
-                <FaMedal className="mr-2 text-xl" />
-                <span className="font-bold">Score: {socialScore}</span>
-              </div>
-
-              {/* Notifications */}
-              <NotificationBell />
-
-              {/* Profile Icon with Dropdown */}
-              <div className="relative">
-                <button
-                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="focus:outline-none"
-                >
-                  <FaUserCircle className="text-xl text-blue-400 hover:text-blue-500 transition duration-300" />
-                </button>
-
-                {profileDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-40 bg-white text-gray-800 rounded-md shadow-lg py-2">
-                    <Link
-                      to="/profile"
-                      className="block px-4 py-2 text-blue-500 hover:bg-gray-200"
-                      onClick={() => setProfileDropdownOpen(false)}
-                    >
-                      Profile
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-200"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            </>
+          {isLoggedIn && isApproved && (
+            <Link to="/donate" className="hover:text-blue-400 transition duration-300">
+              Donate
+            </Link>
           )}
 
-          {!isLoggedIn && (
-            <>
-              <Link to="/login" className="hover:text-blue-400 transition duration-300">
-                Login
-              </Link>
-              <Link to="/register" className="hover:text-green-400 transition duration-300">
-                Register
-              </Link>
-            </>
+          {isLoggedIn && isAdmin && (
+            <Link to="/admin" className="hover:text-red-400 transition duration-300">
+              Admin
+            </Link>
           )}
         </div>
       </div>
 
-      {/* Full-Screen Mobile Drawer Menu */}
+      {/* Full-Screen Mobile Drawer Menu (Slide from Left) */}
       <div
-        className={`fixed inset-0 bg-gray-800 bg-opacity-95 transform w-2/3 ${
+        className={`fixed inset-0 bg-gray-800 bg-opacity-95 transform w-2/3 max-w-xs ${
           menuOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out z-50`}
       >
@@ -151,26 +130,20 @@ const Navbar = () => {
             Community
           </Link>
 
+          {isLoggedIn && isApproved && (
+            <Link to="/donate" onClick={() => setMenuOpen(false)} className="hover:text-blue-400">
+              Donate
+            </Link>
+          )}
+
+          {isLoggedIn && isAdmin && (
+            <Link to="/admin" onClick={() => setMenuOpen(false)} className="hover:text-red-400">
+              Admin
+            </Link>
+          )}
+
           {isLoggedIn && (
             <>
-              {isApproved && (
-                <Link to="/donate" onClick={() => setMenuOpen(false)} className="hover:text-blue-400">
-                  Donate
-                </Link>
-              )}
-              {isAdmin && (
-                <Link to="/admin" onClick={() => setMenuOpen(false)} className="hover:text-red-400">
-                  Admin
-                </Link>
-              )}
-
-              {/* Mobile Social Score */}
-              <div className="bg-yellow-500 text-gray-900 px-4 py-2 rounded-lg shadow-md">
-                <FaMedal className="inline mr-2 text-lg" />
-                <span className="font-bold">Score: {socialScore}</span>
-              </div>
-
-              {/* Mobile Profile Options */}
               <Link to="/profile" onClick={() => setMenuOpen(false)} className="hover:text-blue-400">
                 Profile
               </Link>
