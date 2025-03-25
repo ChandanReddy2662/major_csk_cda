@@ -106,7 +106,15 @@ const Login = () => {
               {message}
             </motion.div>
           )}
-        </form>
+        </form> 
+        {/* Register Option */}
+        <div className="text-center mt-4">
+          <p className="text-gray-600">Don't have an account?</p>
+          <Link to="/register" className="text-blue-600 hover:underline">
+            Register here
+          </Link>
+        </div>
+        
       </motion.div>
     </div>
   );
