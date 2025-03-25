@@ -78,6 +78,17 @@ const Navbar = () => {
               )}
             </div>
           )}
+          {!isLoggedIn && (
+            <>
+              <Link to="/login" onClick={() => setMenuOpen(false)} className="hover:text-blue-400">
+                Login
+              </Link>
+              <Link to="/register" onClick={() => setMenuOpen(false)} className="hover:text-green-400">
+                Register
+              </Link>
+            </>
+          )}
+
         </div>
 
         {/* Desktop Navigation (Centered in Large Screens) */}
