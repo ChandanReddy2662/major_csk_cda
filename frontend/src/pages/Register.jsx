@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Loader from "../components/Loader";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; 
@@ -228,6 +228,13 @@ const Register = () => {
           )}
         </form>
       </motion.div>
+       {/* Register Option */}
+        <div className="text-center mt-4">
+          <p className="text-gray-600">Already have an account?</p>
+          <Link to="/login" className="text-blue-600 hover:underline">
+            Login here
+          </Link>
+        </div>
     </div>
   );
 };
