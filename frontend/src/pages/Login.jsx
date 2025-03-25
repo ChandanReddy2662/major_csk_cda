@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import icons
-import Loader from "../components/Loader
+import Loader from "../components/Loader";
 import { Link } from "react-router-dom";
 
 const VITE_SERVER = import.meta.env.VITE_API_URL;
