@@ -227,7 +227,6 @@ const Register = () => {
             </motion.div>
           )}
         </form>
-      </motion.div>
        {/* Register Option */}
         <div className="text-center mt-4">
           <p className="text-gray-600">Already have an account?</p>
@@ -235,6 +234,7 @@ const Register = () => {
             Login here
           </Link>
         </div>
+      </motion.div>
     </div>
   );
 };
